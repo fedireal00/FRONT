@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 3.22)
+
+# Build a Universal Binary on macOS (Intel + Apple Silicon) so the plugin
+# loads in any DAW regardless of the host architecture (e.g. arm64 Pro Tools
+# would otherwise reject an Intel-only build).
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "macOS universal binary architectures" FORCE)
+endif()
+
 project(FRONT VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
