@@ -20,7 +20,7 @@ jobs:
             cmake_args: >-
               -G Xcode
               -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
-              -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=""
+              -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="-"
               -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
     name: ${{ matrix.name }}
@@ -38,6 +38,18 @@ jobs:
 
       - name: Build
         run: cmake --build build --config Release
+
+      - name: Ad-hoc codesign (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          for p in build/FRONT_artefacts/Release/VST3/*.vst3 \
+                   build/FRONT_artefacts/Release/AU/*.component; do
+            if [ -e "$p" ]; then
+              echo "Signing $p"
+              codesign --force --deep -s - "$p"
+              codesign -dv "$p" || true
+            fi
+          done
 
       - name: Upload artifact (Windows)
         if: runner.os == 'Windows'
