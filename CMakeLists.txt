@@ -5,6 +5,10 @@ cmake_minimum_required(VERSION 3.22)
 # would otherwise reject an Intel-only build).
 if(APPLE)
     set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "macOS universal binary architectures" FORCE)
+    # Target an older macOS so the binary doesn't reference libc++ symbols that
+    # only exist on the build machine's newer OS (e.g. the macOS 15 CI runner).
+    # The arm64 slice is automatically raised to its 11.0 minimum.
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum macOS version" FORCE)
 endif()
 
 project(FRONT VERSION 1.0.0)

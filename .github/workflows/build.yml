@@ -20,6 +20,7 @@ jobs:
             cmake_args: >-
               -G Xcode
               -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+              -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
               -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="-"
               -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
